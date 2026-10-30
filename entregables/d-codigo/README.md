@@ -1,34 +1,31 @@
-# d. Código fuente completo + versiones
+# d. Código fuente
 
-**Qué pide la norma:** «código fuente completo de la herramienta construida (incluidas las versiones
-utilizadas de librerías que no se encuentran en la instalación estándar del software)» (§3.1.1 d).
+Los lineamientos piden el código fuente completo, con las versiones de cualquier librería que no venga en la
+instalación estándar. El código está en [`../../codigo/`](../../codigo/). Esta carpeta solo guarda el zip que
+va en el correo y la tabla de versiones.
 
-El código está en [`../../codigo/`](../../codigo/). Esta carpeta solo guarda el `.zip` que se adjunta al
-correo y la tabla de versiones.
+Para armar el zip sin resultados ni compilados, desde la raíz del repositorio:
 
-**Armar el zip** (desde `talleres/taller-01-manets/`), sin resultados ni binarios:
 ```bash
-zip -r entregables/d-codigo/Taller01_MANETs_d_codigo.zip codigo -x 'codigo/resultados/*' -x '*.so' -x '*/__pycache__/*'
+zip -r entregables/d-codigo/Taller01_MANETs_d_codigo.zip codigo instalar.sh INSTALACION.md \
+    -x 'codigo/resultados/*' -x '*.so' -x '*/__pycache__/*'
 ```
 
-**Versiones usadas** (medidas el 29 oct 2026 en el Mac de desarrollo):
+Versiones con las que se desarrolló, medidas el 29 de octubre de 2026 en un Mac con Apple silicon:
 
 | Pieza | Versión | Para qué |
 |---|---|---|
-| ns-3 | 3.46.1 (ns-allinone-3.46.1) | Simulador |
-| ns3-ai | fork DEFIANCE v1.45.2 (incluido en ns-allinone-3.46.1, `contrib/ai`) | Estimador en Python durante la simulación (opcional) |
-| NetAnim | 3.110 (Qt 5.15.19) | Animación (opcional) |
-| Compilador | Apple clang 21.0.0, arm64, macOS 27.0.1 | |
-| CMake / Ninja / ccache | 4.4.5 / 1.13.2 / 4.14.2 | Compilación |
-| Boost / protobuf / pybind11 | 1.92.0 / 36.2 / 3.1.0 | Dependencias de ns3-ai |
-| Python | 3.13.5 (venv `~/tools/ns3ai-venv`) | Análisis y estimador ns3-ai |
-| numpy / pandas / matplotlib | 2.5.4 / 3.1.0 / 3.11.2 | Análisis y gráficas |
-| gymnasium / ray / protobuf (Python) | 1.2.2 / 2.59.0 / 7.36.2 | Los exige ns3-ai; el taller no los usa directamente |
+| ns-3 | 3.46.1, del paquete ns-allinone-3.46.1 | el simulador |
+| ns3-ai | v1.45.2 del proyecto DEFIANCE, la que trae ns-allinone-3.46.1 en `contrib/ai` | el estimador en Python durante la simulación |
+| NetAnim | 3.110, con Qt 5.15.19 | ver la animación |
+| Compilador | Apple clang 21.0.0, macOS 27.0.1 | |
+| CMake, Ninja | 4.4.5, 1.13.2 | compilar |
+| Boost, protobuf, pybind11 | 1.92.0, 36.2, 3.1.0 | los necesita ns3-ai |
+| Python | 3.13.5 | análisis y estimador en Python |
+| numpy, matplotlib | 2.5.4, 3.11.2 | análisis y gráficas |
 
-**Cambios locales a ns-3/ns3-ai** que hay que declarar (detalle en el README del taller, sección Entorno):
-1. `contrib/ai/examples/a-plus-b/CMakeLists.txt`: enlace a `libcore` (solo macOS; no afecta al taller).
-2. `contrib/ai/python_utils/ns3ai_utils.py`: nombre por defecto de la memoria compartida. El taller no lo
-   usa: `ns3ai_estimador.py` pasa el nombre explícito.
-3. `contrib/defiance` retirado del árbol: no compilaba en macOS y el taller no lo usa.
+ns-3 se usa sin cambios. `instalar.sh` solo compila un subconjunto de módulos y desactiva el enlazador rápido
+`lld`, que en macOS no sabe enlazar contra la libc++ del sistema.
 
-Cómo instalar y correr: eso va en el manual técnico ([`../e-manuales/`](../e-manuales/)).
+Cómo instalar y correr todo va en el manual técnico, literal e. [INSTALACION.md](../../INSTALACION.md) sirve
+de base.

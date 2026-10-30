@@ -1,42 +1,38 @@
-# b. Descripción y justificación del problema (PDF)
+# b. Descripción y justificación del problema
 
-**Qué pide la norma:** «descripción y justificación del problema a resolver» (§3.1.1 b). El enunciado del
-taller agrega:
-- una **indagación** (pregunta de investigación, «al estilo Newton») **sobre modelos de movilidad en
-  MANET**, de dificultad intermedia;
-- responderla con el **método científico**.
+Los lineamientos piden "un archivo PDF con descripción y justificación del problema a resolver". El correo del
+profesor agrega que el problema debe ser una pregunta de investigación sobre modelos de movilidad en MANET, de
+dificultad intermedia, y que se responde con el método científico. Lo escribe el grupo.
 
-Lo escribe el grupo. El borrador de la idea está en el README del taller, sección «Idea de indagación».
+El borrador de la pregunta y de las hipótesis está en la sección "Borrador de la pregunta de investigación" del
+[README](../../README.md).
 
-**Esqueleto** (solo títulos):
-1. Contexto: el perro perdido y el collar con beacon
+Un posible orden:
+1. Contexto: el perro perdido y su collar
 2. Pregunta de investigación
 3. Hipótesis
-4. Justificación: por qué importa y por qué la movilidad es la variable
-5. Variables
-   - independientes (factores);
-   - dependientes (métricas);
-   - controladas (parámetros fijos)
-6. Método: cómo se va a responder (diseño del experimento; ver el literal f)
-7. Alcance y supuestos (qué se simplifica y por qué)
+4. Por qué importa, y por qué la movilidad es la variable que estudiamos
+5. Variables: las que cambiamos, las que medimos y las que dejamos fijas
+6. Método: cómo vamos a responder la pregunta. El detalle va en el literal f
+7. Alcance y supuestos
 
-**Datos del código útiles para las secciones 5 y 7:**
-- Factores disponibles:
-  - `clusterMobility` y `nodeMobility` (diseño 2 × 2);
-  - `routing` (aodv, olsr, dsdv);
-  - `zoneFusion` (none, raw, merge);
-  - `estMethod`;
-  - densidad (`nodesPerCluster`);
-  - sombreado (`shadowSigmaDb`).
-  La lista completa está en `../../codigo/escenarios/base.conf`.
-- Métricas que ya se miden:
-  - error de localización (m), disponibilidad y frescura;
-  - entrega y latencia por tipo de mensaje;
-  - éxito, RTT, edad y error de las consultas del dueño.
-- Supuestos del modelo que conviene declarar (ver «Hallazgos» en el README del taller):
-  - sombreado independiente por paquete;
-  - cola ARP de 64;
-  - 802.11b como sustituto de BLE;
-  - censura de lecturas por debajo de ~−90 dBm.
+Para la sección 5, el código ya permite variar:
+- la movilidad de clústeres y de nodos, `clusterMobility` y `nodeMobility`;
+- el protocolo de enrutamiento, `routing`;
+- la forma de combinar las zonas, `zoneFusion`;
+- el método de estimación, `estMethod`;
+- la densidad, `nodesPerCluster`;
+- el sombreado, `shadowSigmaDb`.
 
-Encabezado con los autores: ver [`../autores.md`](../autores.md).
+Todos están en [`codigo/escenarios/base.conf`](../../codigo/escenarios/base.conf).
+
+Lo que ya se mide:
+- el error de localización en metros;
+- si hubo estimación y qué tan vieja era;
+- cuántos mensajes llegan y cuánto tardan;
+- si el dueño recibió respuesta, cuánto tardó y qué tan errada estaba.
+
+Para la sección 7, la sección "Qué declarar en el informe" del README lista los supuestos que conviene poner
+por escrito.
+
+El encabezado lleva los nombres de [`../autores.md`](../autores.md).

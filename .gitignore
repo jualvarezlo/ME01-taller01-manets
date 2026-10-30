@@ -13,3 +13,7 @@ __pycache__/
 
 # Sistema
 .DS_Store
+
+# Entorno local que crea instalar.sh
+.venv/
+entorno.sh

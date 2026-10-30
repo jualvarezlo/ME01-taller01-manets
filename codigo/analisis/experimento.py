@@ -7,7 +7,7 @@ Todo se junta en resultados/<nombre>/experimento.csv (una fila por corrida y mé
 resultados/<nombre>/experimento_red.csv (una fila por corrida).
 
 Uso (desde codigo/):
-  ~/tools/ns3ai-venv/bin/python analisis/experimento.py --nombre factorial --reps 10 [--estimador python] \
+  python analisis/experimento.py --nombre factorial --reps 10 [--estimador python] \
       --routing aodv olsr dsdv [-- --simTime=600 ...]
 
 Lo que va después de "--" se pasa tal cual a collar-sim (mismos parámetros para todas las combinaciones).

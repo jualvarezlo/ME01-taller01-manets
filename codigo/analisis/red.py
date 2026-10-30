@@ -4,7 +4,7 @@ Lee mensajes.csv, reportes.csv, consultas.csv y estimaciones_red.csv. Solo cuent
 simTime - --margen, para no tomar como perdido lo que no alcanzó a llegar porque la simulación terminó.
 
 Uso:
-  ~/tools/ns3ai-venv/bin/python analisis/red.py resultados/<corrida> [--margen 5]
+  python analisis/red.py resultados/<corrida> [--margen 5]
 
 Escribe <corrida>/resumen_red.csv e imprime el resumen.
 """

@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Compila la simulación (y el binding de ns3-ai, si ns3-ai está instalado). Correrlo después de
+# cambiar cualquier .cc o .h de codigo/.
+set -euo pipefail
+aqui="$(cd "$(dirname "$0")" && pwd)"
+if [ -z "${NS3_DIR:-}" ] && [ -f "$aqui/../entorno.sh" ]; then
+    # shellcheck disable=SC1091
+    source "$aqui/../entorno.sh"
+fi
+if [ -z "${NS3_DIR:-}" ]; then
+    echo "No encuentro ns-3: corre ./instalar.sh desde la raíz del repositorio (ver INSTALACION.md)." >&2
+    exit 1
+fi
+cd "$NS3_DIR"
+./ns3 build scratch/manets/collar-sim

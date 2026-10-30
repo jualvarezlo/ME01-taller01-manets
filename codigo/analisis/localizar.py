@@ -7,7 +7,7 @@ Métodos, evaluados cada --paso segundos con las lecturas de la ventana (t - --v
                pesos 1/d^2, Gauss-Newton desde el centroide. Necesita >= 3 celulares distintos.
 
 Uso:
-  ~/tools/ns3ai-venv/bin/python analisis/localizar.py resultados/<corrida> [--paso 5] [--ventana 10]
+  python analisis/localizar.py resultados/<corrida> [--paso 5] [--ventana 10]
 
 Escribe <corrida>/estimaciones.csv y <corrida>/resumen.csv, e imprime el resumen.
 """

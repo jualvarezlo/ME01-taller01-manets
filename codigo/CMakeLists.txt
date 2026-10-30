@@ -1,5 +1,12 @@
-# scratch/manets (symlink a codigo/). Con este archivo ns-3 no arma el programa solo: lo hacemos aquí
-# para poder compilar también el binding de Python de ns3-ai.
+# scratch/manets (enlace simbólico a codigo/). Con este archivo, ns-3 no arma el programa solo: lo
+# hacemos aquí para poder compilar también el binding de Python de ns3-ai.
+
+# ns3-ai es opcional: si ns-3 no compiló el módulo ai (faltan Boost, protobuf o pybind11), la simulación
+# se compila igual, solo que sin --estimator=python.
+set(collar_definiciones)
+if(DEFINED libai AND TARGET ${libai})
+  set(collar_definiciones COLLAR_CON_NS3AI)
+endif()
 
 build_exec(
   EXECNAME collar-sim
@@ -7,11 +14,17 @@ build_exec(
   SOURCE_FILES collar-sim.cc
   HEADER_FILES estimador.h ns3ai/collar-msg.h
   LIBRARIES_TO_LINK "${ns3-libs}" "${ns3-contrib-libs}"
+  DEFINITIONS ${collar_definiciones}
   EXECUTABLE_DIRECTORY_PATH ${CMAKE_OUTPUT_DIRECTORY}/scratch/manets/
 )
 
-# Binding para el estimador en Python (--estimator=python). Necesita pybind11 (lo trae contrib/ai).
-# Como en contrib/ai: FindPython primero, si no pybind11_add_module no encuentra Python_add_library.
+if(NOT collar_definiciones)
+  message(STATUS "scratch/manets: ns-3 sin el módulo ai; collar-sim se compila sin --estimator=python")
+  return()
+endif()
+
+# Binding para el estimador en Python. Como en contrib/ai: FindPython primero, si no
+# pybind11_add_module no encuentra Python_add_library.
 find_package(Python COMPONENTS Interpreter Development QUIET)
 find_package(pybind11 CONFIG QUIET)
 if(Python_FOUND AND pybind11_FOUND)

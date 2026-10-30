@@ -1,52 +1,41 @@
-# e. Manual de usuario y manual técnico (PDF)
+# e. Manual de usuario y manual técnico
 
-**Qué pide la norma:** «un archivo PDF con el manual de usuario y manual técnico» (§3.1.1 e). El correo del
-profesor los recalca. Los escribe el grupo. Pueden ir en un solo PDF con dos partes.
+Los lineamientos piden "un archivo PDF con el manual de usuario y manual técnico", y el correo del profesor
+los vuelve a mencionar. Los escribe el grupo. Pueden ir en un solo PDF con dos partes.
 
-## Manual de usuario: para quien corre la simulación y lee resultados
+## Manual de usuario
 
-Esqueleto (solo títulos):
-1. Qué hace el programa (en una página)
-2. Requisitos (sistema operativo; lo ya instalado)
-3. Correr una simulación
-   - con los valores por defecto;
-   - con un archivo de escenario (`--conf`, ver `codigo/escenarios/base.conf`).
-4. Parámetros (tabla: nombre, qué controla, valor por defecto, rango razonable)
-5. Correr el experimento completo (`analisis/experimento.py`)
-6. Archivos de salida (qué trae cada CSV, `escena.png`, `netanim.xml`)
+Es para quien corre la simulación y lee los resultados, sin tocar el código. Un posible orden:
+1. Qué hace el programa, en una página
+2. Qué hay que tener instalado
+3. Correr una simulación con los valores por defecto, y con un archivo de escenario
+4. Tabla de parámetros: nombre, qué controla, valor por defecto y un rango razonable
+5. Correr el experimento completo
+6. Qué trae cada archivo de salida
 7. Ver la animación en NetAnim
 8. Problemas frecuentes
 
-Fuentes en el repo:
-- `codigo/escenarios/base.conf`: todos los parámetros, comentados;
-- el binario con `--help`;
-- README del taller, sección «Código» (comandos).
+Material de partida en el repositorio:
+- las secciones "Correr", "Probar con otros parámetros" y "Archivos de salida" del [README](../../README.md);
+- [`codigo/escenarios/base.conf`](../../codigo/escenarios/base.conf), con todos los parámetros comentados;
+- `./simular --help`.
 
-## Manual técnico: para quien instala, mantiene o modifica el código
+## Manual técnico
 
-Esqueleto (solo títulos):
-1. Arquitectura (remite al diseño, literal c)
-2. Instalación paso a paso
-   - ns-3 3.46.1;
-   - NetAnim;
-   - ns3-ai y el venv de Python.
-3. Compilación (`./ns3 build scratch/manets/collar-sim`; qué hace `codigo/CMakeLists.txt`)
-4. Estructura del código: archivo por archivo y función por función
-5. Modelo de simulación: jerarquía, movilidad, canal, mensajes y estimación
-6. Integración ns3-ai: memoria compartida, `ns3ai/collar-msg.h`, el binding, el ciclo de Python
-7. Cómo extender
-   - otro estimador (`estimar_peticion()` o `estimador.h`);
-   - otro clúster o zona (`kClusters`, `kZones`);
-   - otro protocolo.
-8. Reproducibilidad: `RngRun`, `parametros.txt`, `parametros_texto.txt`
-9. Problemas conocidos y decisiones
-   - cola ARP;
-   - el doble `CppSetFinished`;
-   - `NS3_FAST_LINKERS=OFF`;
-   - DEFIANCE retirado del árbol.
+Es para quien instala, mantiene o modifica el código. Un posible orden:
+1. Arquitectura, remitiendo al diseño del literal c
+2. Instalación de ns-3, ns3-ai y NetAnim
+3. Cómo se compila, y qué hace `codigo/CMakeLists.txt`
+4. Estructura del código, archivo por archivo
+5. El modelo: jerarquía, movilidad, canal, mensajes y estimación
+6. La integración con ns3-ai: la memoria compartida, `ns3ai/collar-msg.h`, el binding y el ciclo de Python
+7. Cómo agregar un estimador, un clúster o un protocolo
+8. Reproducibilidad: semillas y archivos de parámetros
+9. Problemas conocidos y decisiones que tomamos
 
-Fuentes en el repo:
-- README del taller, secciones «Entorno» y «Código»: comandos exactos, errores encontrados y cómo se resolvieron;
-- comentarios en `collar-sim.cc`.
+Material de partida en el repositorio:
+- [INSTALACION.md](../../INSTALACION.md), con los pasos y los errores conocidos;
+- la sección "Qué simula" del README;
+- los comentarios de `collar-sim.cc`.
 
-Encabezado con los autores: ver [`../autores.md`](../autores.md).
+El encabezado lleva los nombres de [`../autores.md`](../autores.md).

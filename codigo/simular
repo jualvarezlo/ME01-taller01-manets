@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Corre la simulación compilada con los argumentos que se le pasen.
+#   ./simular --conf=escenarios/base.conf --outDir=resultados/demo
+#   ./simular --help
+set -euo pipefail
+aqui="$(cd "$(dirname "$0")" && pwd)"
+if [ -z "${NS3_DIR:-}" ] && [ -f "$aqui/../entorno.sh" ]; then
+    # shellcheck disable=SC1091
+    source "$aqui/../entorno.sh"
+fi
+if [ -z "${NS3_DIR:-}" ]; then
+    echo "No encuentro ns-3: corre ./instalar.sh desde la raíz del repositorio (ver INSTALACION.md)." >&2
+    exit 1
+fi
+binario="$(ls -t "$NS3_DIR"/build/scratch/manets/ns3.*-collar-sim-* 2>/dev/null | head -1 || true)"
+if [ -z "$binario" ]; then
+    echo "La simulación no está compilada: corre ./compilar" >&2
+    exit 1
+fi
+exec "$binario" "$@"

@@ -1,14 +1,15 @@
-# Correo de entrega: lista de chequeo
+# Correo de entrega
 
-Lo redacta y lo envía **un** integrante del grupo. Reglas del correo del profesor (5 oct 2026):
+Lo escribe y lo envía un integrante. Antes de darle enviar, revisen esto, que sale del correo del profesor del
+5 de octubre:
 
-- [ ] **Responder** el correo «Taller 01» del 5 de octubre (el mismo hilo), **solo al profesor**: no
-      «responder a todos».
-- [ ] Enviar desde el **correo institucional** (@unal.edu.co).
-- [ ] Antes de las **11:59 pm del miércoles 4 de noviembre de 2026**.
-- [ ] En el cuerpo: **nombres y apellidos completos** de cada integrante y una breve reseña del **rol** que
-      tuvo cada uno (ver [`autores.md`](autores.md)).
-- [ ] Adjuntos: los literales a–f (o un solo PDF con todo + el zip del código). Ver [`README.md`](README.md).
-- [ ] Cada adjunto lleva los datos de **todos** los autores.
-- [ ] Revisar que el zip del código abra y no traiga `resultados/` ni binarios.
-- [ ] Si los adjuntos pesan mucho, compartirlos por Drive institucional y poner el enlace en el correo.
+- [ ] Es una respuesta al correo "Taller 01" del 5 de octubre, en el mismo hilo.
+- [ ] Va solo al profesor. Nada de "responder a todos", que el original le llegó a todo el curso.
+- [ ] Sale del correo institucional @unal.edu.co.
+- [ ] Sale antes de las 11:59 pm del miércoles 4 de noviembre de 2026.
+- [ ] El cuerpo trae los nombres y apellidos completos de cada integrante y una línea sobre lo que hizo cada
+      uno. Están en [`autores.md`](autores.md).
+- [ ] Van adjuntos los literales a–f, o un solo PDF con todo más el zip del código.
+- [ ] Cada adjunto tiene los nombres de todos los autores.
+- [ ] El zip del código abre bien y no trae `resultados/` ni archivos compilados.
+- [ ] Si los adjuntos pesan demasiado para el correo, súbanlos al Drive institucional y pongan el enlace.

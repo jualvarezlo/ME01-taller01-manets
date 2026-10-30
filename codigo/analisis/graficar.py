@@ -1,7 +1,7 @@
 """Dibuja una corrida: trayectorias por clúster, el perro y las estimaciones de cada método.
 
 Uso:
-  ~/tools/ns3ai-venv/bin/python analisis/graficar.py resultados/<corrida>   (necesita estimaciones.csv)
+  python analisis/graficar.py resultados/<corrida>   (necesita estimaciones.csv)
 
 Escribe <corrida>/escena.png.
 """

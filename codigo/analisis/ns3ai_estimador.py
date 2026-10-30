@@ -5,7 +5,7 @@ petición de estimación con localizar.estimar(): la misma función que usa el a
 Mientras Python calcula, la simulación está detenida.
 
 Uso (desde codigo/):
-  ~/tools/ns3ai-venv/bin/python analisis/ns3ai_estimador.py -- --outDir=$PWD/resultados/demo-py [...]
+  python analisis/ns3ai_estimador.py -- --outDir=resultados/demo-py [...]
 
 Todo lo que va después de "--" se pasa a collar-sim.
 """

@@ -35,14 +35,18 @@
  * Salidas en --outDir: rssi.csv, posiciones.csv, nodos.csv, mensajes.csv, reportes.csv,
  * estimaciones_red.csv, consultas.csv, parametros.txt y (opcional) netanim.xml.
  *
- * Ejecutar desde ns-3.46.1/:
- *   ./ns3 run "scratch/manets/collar-sim --clusterMobility=1 --nodeMobility=1 --RngRun=1"
+ * Compilar y correr desde codigo/ (ver INSTALACION.md):
+ *   ./compilar
+ *   ./simular --clusterMobility=1 --nodeMobility=1 --RngRun=1 --outDir=resultados/demo
  */
 
 #include "estimador.h"
 #include "ns3ai/collar-msg.h"
 
+// COLLAR_CON_NS3AI lo define codigo/CMakeLists.txt solo si ns-3 compiló el módulo ai.
+#ifdef COLLAR_CON_NS3AI
 #include "ns3/ns3-ai-msg-interface.h"
+#endif
 
 #include "ns3/aodv-module.h"
 #include "ns3/core-module.h"
@@ -219,7 +223,9 @@ std::vector<ReportRecord> g_reports; // índice = id de reporte
 std::vector<QueryRecord> g_queries;  // índice = id de consulta
 AppConfig g_cfg;
 // Canal ns3-ai hacia el estimador en Python; nulo si --estimator=cpp.
+#ifdef COLLAR_CON_NS3AI
 Ns3AiMsgInterfaceImpl<collar::Peticion, collar::Respuesta>* g_ai = nullptr;
+#endif
 uint64_t g_aiTruncated = 0; // ventanas con más de kMaxLecturas lecturas
 Ptr<MobilityModel> g_dogMm;
 Ptr<NormalRandomVariable> g_gpsNoise;
@@ -437,6 +443,7 @@ SendReport(uint32_t observer, uint32_t rid)
     SendMsg(observer, g_app[observer].clusterHead, 'R', ReportBody(rid));
 }
 
+#ifdef COLLAR_CON_NS3AI
 // Manda la ventana al estimador en Python por memoria compartida y espera la respuesta.
 // La simulación queda detenida mientras Python calcula.
 collar::Resultado
@@ -477,6 +484,7 @@ EstimarEnPython(const std::vector<collar::Lectura>& lecturas,
     g_ai->CppRecvEnd();
     return res;
 }
+#endif
 
 void
 EstimateTick(uint32_t zoneHead)
@@ -505,9 +513,13 @@ EstimateTick(uint32_t zoneHead)
         observers.insert(l.observador);
     }
     int zone = g_nodeInfo[zoneHead].zone;
+#ifdef COLLAR_CON_NS3AI
     collar::Resultado res =
         g_ai ? EstimarEnPython(keep, keepT, zone, zoneHead)
              : collar::Estimar(keep, g_cfg.method, g_cfg.p0, g_cfg.pathLossExp);
+#else
+    collar::Resultado res = collar::Estimar(keep, g_cfg.method, g_cfg.p0, g_cfg.pathLossExp);
+#endif
     Vector dog = g_dogMm->GetPosition();
     g_estOut << now << "," << zone << "," << zoneHead << "," << g_cfg.methodName << "," << res.valido
              << ",";
@@ -789,7 +801,7 @@ main(int argc, char* argv[])
     double reportJitterMs = 100.0;
     uint32_t arpQueue = 64;
     bool netanim = false;
-    std::string outDir = "scratch/manets/resultados/prueba";
+    std::string outDir = "resultados/prueba";
 
     CommandLine cmd(__FILE__);
     cmd.AddValue("clusterMobility", "Clústeres (nivel 1) en movimiento", clusterMobility);
@@ -847,7 +859,7 @@ main(int argc, char* argv[])
                  "Paquetes en espera por vecino sin resolver en ARP (ns-3 trae 3; Linux ~100)",
                  arpQueue);
     cmd.AddValue("netanim", "Escribir netanim.xml", netanim);
-    cmd.AddValue("outDir", "Carpeta de salida (relativa a ns-3.46.1/)", outDir);
+    cmd.AddValue("outDir", "Carpeta de salida (relativa a la carpeta actual)", outDir);
     std::vector<std::string> confFiles;
     cmd.Parse(ExpandConf(argc, argv, confFiles));
     if (zoneFusion == "none")
@@ -875,6 +887,7 @@ main(int argc, char* argv[])
     NS_ABORT_MSG_IF(estimator != "cpp" && estimator != "python", "estimator debe ser cpp o python");
     if (estimator == "python")
     {
+#ifdef COLLAR_CON_NS3AI
         // Python crea la memoria compartida y luego lanza este programa (analisis/ns3ai_estimador.py).
         auto interface = Ns3AiMsgInterface::Get();
         interface->SetIsMemoryCreator(false);
@@ -882,6 +895,10 @@ main(int argc, char* argv[])
         interface->SetHandleFinish(true);
         interface->SetTrialName(ns3aiTrial);
         g_ai = interface->GetInterface<collar::Peticion, collar::Respuesta>();
+#else
+        NS_ABORT_MSG("--estimator=python necesita ns3-ai, y este ns-3 se compiló sin el módulo ai "
+                     "(ver INSTALACION.md)");
+#endif
     }
     g_cfg.p0 = collarTxDbm - refLossDb;
     g_cfg.pathLossExp = pathLossExp;
