@@ -1,0 +1,15 @@
+# Material del curso y libros (derechos de autor; ~1 GB). Cada integrante lo tiene del Drive del curso.
+fuentes/
+# Copia del correo del profesor: trae enlaces privados al Drive del curso.
+enunciado.md
+
+# Salidas de la simulación (se regeneran con analisis/experimento.py)
+codigo/resultados/
+
+# Compilados
+codigo/ns3ai/*.so
+__pycache__/
+*.pyc
+
+# Sistema
+.DS_Store
