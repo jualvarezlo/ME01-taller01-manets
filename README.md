@@ -112,6 +112,15 @@ La posición de cada celular es la suma de tres capas:
 
 Las cajas miden 12 × 3 m en el bus, 20 × 20 m en la plaza y 6 × 6 m en el paseador.
 
+El bus es el ejemplo más claro. El bus recorre su ruta como un bloque, y los 8 celulares que van adentro
+se mueven con él: cuando el bus dobla una esquina, doblan todos. Al mismo tiempo, cada pasajero camina al
+azar dentro del bus a 0.5 m/s y cambia de dirección cada 5 s, sin salirse de la caja de 12 × 3 m. En
+ns-3, el bus es el padre de un `HierarchicalMobilityModel` y cada celular es un hijo. Lo medimos en una
+corrida de 120 s: el bus llegó a 6 m/s y recorrió 480 m, mientras los pasajeros se movían en promedio a
+0.4 m/s respecto al bus. Con `--nodeMobility=false` los pasajeros quedan quietos en su puesto, como
+sentados, y solo se mueve el bus. El modelo no tiene paradas donde la gente suba o baje: los mismos 8
+celulares van todo el recorrido.
+
 `--clusterMobility` y `--nodeMobility` prenden o apagan el movimiento de cada nivel. Sus cuatro combinaciones
 son las del experimento: estático, solo-nodo, solo-clúster y clúster+nodo.
 
