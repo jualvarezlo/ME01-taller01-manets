@@ -42,28 +42,43 @@ consultas respondidas; su origen en los CSV está en el literal b (Sección 5.2)
 
 ## 2. Escenarios
 
-Al menos tres escenarios, según los lineamientos. Completar la tabla y crear un `.conf` por escenario
-en `codigo/escenarios/`.
+Se definen cuatro escenarios. El primero responde la pregunta en condiciones por defecto; los otros
+tres comprueban si esa respuesta es robusta al variar, uno a uno, los factores secundarios que el
+literal b dejó señalados: densidad, sombreado y fusión de zonas. En los cuatro, `experimento.py`
+cruza siempre las 4 combinaciones de movilidad con los 3 protocolos, así que el factor principal
+(la movilidad) se estudia dentro de cada escenario.
 
-| # | Nombre | Archivo de parámetros | Qué cambia frente a `base.conf` | Qué prueba |
+| # | Nombre | Archivo(s) de parámetros | Qué cambia frente a `base.conf` | Qué prueba |
 |---|---|---|---|---|
-| E1 | *[...]* | `codigo/escenarios/E1.conf` | *[...]* | *[...]* |
-| E2 | *[...]* | `codigo/escenarios/E2.conf` | *[...]* | *[...]* |
-| E3 | *[...]* | `codigo/escenarios/E3.conf` | *[...]* | *[...]* |
+| E1 | Caso base | `E1.conf` | nada (valores por defecto) | el efecto de la movilidad en condiciones por defecto |
+| E2 | Densidad | `E2-densidad-baja.conf` (`nodesPerCluster=4`), `E2-densidad-alta.conf` (`=16`) | observadores por clúster (base: 8) | si más observadores compensan la mala geometría del bus |
+| E3 | Sombreado | `E3-sombreado-cero.conf` (`shadowSigmaDb=0`), `E3-sombreado-alto.conf` (`=8`) | ruido del canal (base: 4 dB) | si el patrón de movilidad que gana cambia con el ruido del canal |
+| E4 | Fusión de zonas | `E4-fusion-raw.conf`, `E4-fusion-merge.conf` (el nivel `none` es E1) | `zoneFusion` (base: none) | si la forma de combinar las dos zonas altera la conclusión |
 
-> Sugerencia de escenarios (a criterio del grupo): E1 podría ser el caso base variando solo el
-> protocolo; E2 podría subir o bajar la densidad (`nodesPerCluster`); E3 podría cambiar el sombreado
-> (`shadowSigmaDb`) o la fusión de zonas (`zoneFusion`). Lo importante es que cada escenario aísle un
-> factor y que los tres juntos ayuden a responder la pregunta.
+Los archivos `.conf` están en `codigo/escenarios/`. Cada uno trae un comentario con su propósito y el
+comando para correrlo. E2, E3 y E4 tienen más de un nivel, de modo que cada nivel es una corrida
+aparte; `experimento.py` fija un solo valor del `.conf` por corrida y lo cruza con las movilidades y
+los protocolos.
 
 ### Cómo generar los datos
 
-Desde `codigo/`, con el entorno cargado (`source entorno.sh`), para cada escenario:
+Desde `codigo/`, con el entorno cargado (`source entorno.sh`):
 
 ```bash
+# E1 — caso base
 python analisis/experimento.py --nombre E1 --reps 10 --routing aodv olsr dsdv -- --conf=escenarios/E1.conf
-python analisis/experimento.py --nombre E2 --reps 10 --routing aodv olsr dsdv -- --conf=escenarios/E2.conf
-python analisis/experimento.py --nombre E3 --reps 10 --routing aodv olsr dsdv -- --conf=escenarios/E3.conf
+
+# E2 — densidad (dos niveles)
+python analisis/experimento.py --nombre E2-densidad-baja --reps 10 --routing aodv olsr dsdv -- --conf=escenarios/E2-densidad-baja.conf
+python analisis/experimento.py --nombre E2-densidad-alta --reps 10 --routing aodv olsr dsdv -- --conf=escenarios/E2-densidad-alta.conf
+
+# E3 — sombreado (dos niveles)
+python analisis/experimento.py --nombre E3-sombreado-cero --reps 10 --routing aodv olsr dsdv -- --conf=escenarios/E3-sombreado-cero.conf
+python analisis/experimento.py --nombre E3-sombreado-alto --reps 10 --routing aodv olsr dsdv -- --conf=escenarios/E3-sombreado-alto.conf
+
+# E4 — fusión de zonas (none ya es E1; faltan raw y merge)
+python analisis/experimento.py --nombre E4-fusion-raw   --reps 10 --routing aodv olsr dsdv -- --conf=escenarios/E4-fusion-raw.conf
+python analisis/experimento.py --nombre E4-fusion-merge --reps 10 --routing aodv olsr dsdv -- --conf=escenarios/E4-fusion-merge.conf
 ```
 
 Cada comando deja en `codigo/resultados/<nombre>/`: `experimento.csv` (error de localización por
@@ -74,13 +89,18 @@ método y réplica), `experimento_red.csv` (métricas de red y de consultas por 
 python analisis/graficar.py resultados/<carpeta_de_una_corrida>
 ```
 
+> Carga de cómputo: cada comando son 4 movilidades × 3 protocolos × 10 réplicas = 120 corridas de
+> `simTime` segundos. En total, los siete comandos suman 840 corridas. Si el tiempo aprieta, se puede
+> bajar `--reps` (por ejemplo a 5) para una primera pasada, o recortar E4 y dejarlo como trabajo
+> futuro; con tres escenarios (E1, E2, E3) ya se supera el mínimo de los lineamientos.
+
 ## 3. Resultados por escenario
 
 Para cada escenario, incluir la tabla resumen (media ± desviación o intervalo de confianza entre
 réplicas) y al menos una gráfica. Las plantillas de tabla siguen las columnas que imprime
-`experimento.py`.
+`experimento.py` y las que trae `experimento_red.csv`.
 
-### 3.1 Escenario E1 — *[nombre]*
+### 3.1 E1 — Caso base
 
 Tabla de localización (de `experimento.csv`):
 
@@ -98,19 +118,45 @@ Tabla de red y consultas (de `experimento_red.csv`):
 |---|---|---|---|---|---|---|
 | *[...]* | | | | | | |
 
-Gráficas (insertar los `.png` que generen):
-
 ![Figura F1. [descripción].]([ruta/a/la/grafica.png])
 
-Comentario de E1: *[qué se observa en este escenario]*
+Comentario de E1: *[qué se observa en el caso base]*
 
-### 3.2 Escenario E2 — *[nombre]*
+### 3.2 E2 — Densidad (baja vs alta)
 
-*(misma estructura que E1)*
+Comparar `E2-densidad-baja` (4 por clúster) con `E2-densidad-alta` (16) y con el caso base (8, de E1).
 
-### 3.3 Escenario E3 — *[nombre]*
+| Densidad | Movilidad | Protocolo | Error mediano (m) | Disponibilidad trilateración |
+|---|---|---|---|---|
+| 4 | *[...]* | | | |
+| 8 (base) | *[...]* | | | |
+| 16 | *[...]* | | | |
 
-*(misma estructura que E1)*
+Comentario de E2: *[¿más observadores compensan la geometría del bus?]*
+
+### 3.3 E3 — Sombreado (cero vs alto)
+
+Comparar `E3-sombreado-cero` (0 dB) con `E3-sombreado-alto` (8 dB) y con el caso base (4 dB, de E1).
+
+| Sombreado (dB) | Movilidad | Protocolo | Error mediano (m) | Frescura (s) |
+|---|---|---|---|---|
+| 0 | *[...]* | | | |
+| 4 (base) | *[...]* | | | |
+| 8 | *[...]* | | | |
+
+Comentario de E3: *[¿el patrón de movilidad que gana cambia con el ruido del canal?]*
+
+### 3.4 E4 — Fusión de zonas (none vs raw vs merge)
+
+Comparar `none` (de E1), `E4-fusion-raw` y `E4-fusion-merge`.
+
+| zoneFusion | Movilidad | Protocolo | Error respuesta (m) | Entrega relevos | Consultas respondidas |
+|---|---|---|---|---|---|
+| none (base) | *[...]* | | | | |
+| raw | *[...]* | | | | |
+| merge | *[...]* | | | | |
+
+Comentario de E4: *[¿compensa el tráfico extra de raw/merge la mejora en el error?]*
 
 ## 4. Análisis
 

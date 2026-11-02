@@ -60,10 +60,13 @@ parámetros y la semilla de la corrida).
 
 ## 3. Jerarquía de la red
 
-La topología es jerárquica de tres niveles. El escenario mide 500 × 300 m y se divide en dos zonas:
-sur, con $y \in [0,150)$, y norte, con $y \in [150,300)$. Cada zona contiene dos clústeres (4 en
-total), y cada clúster agrupa `nodesPerCluster` = 8 celulares, para 32 celulares en total. El collar
-del perro es un nodo aparte que no pertenece a ningún clúster. La figura 2 muestra esta estructura.
+La topología es jerárquica, con dos niveles de agrupamiento sobre los nodos. Siguiendo la
+nomenclatura del enunciado, el primer nivel son los clústeres y el segundo las zonas: hay 4 clústeres
+en el primer nivel (lo que satisface y supera el mínimo de 3) y 2 zonas en el segundo. El escenario
+mide 500 × 300 m y se divide en dos zonas: sur, con $y \in [0,150)$, y norte, con $y \in [150,300)$.
+Cada zona contiene dos clústeres (4 en total), y cada clúster agrupa `nodesPerCluster` = 8 celulares,
+para 32 celulares en total. El collar del perro es un nodo aparte que no pertenece a ningún clúster.
+La figura 2 muestra esta estructura.
 
 ![Figura 2. Jerarquía: 2 zonas, 4 clústeres, 8 celulares por clúster, las cabezas y el collar aparte.](diagramas/jerarquia.png)
 
@@ -90,15 +93,15 @@ la de la zona sur es la del clúster `paseador` (según `kZones`: `norte.headClu
 ## 4. Modelo de movilidad
 
 La posición absoluta de cada celular se construye como la suma de tres capas, usando
-`HierarchicalMobilityModel` de NS-3. Cada capa aporta un desplazamiento: el nivel 2 fija el origen de
-la zona, el nivel 1 mueve la referencia del clúster, y el nivel de nodo desplaza al celular dentro de
-la caja de su clúster. La figura 3 ilustra la composición.
+`HierarchicalMobilityModel` de NS-3. Cada capa aporta un desplazamiento: la zona fija el origen, el
+clúster mueve su referencia como bloque, y el nodo desplaza al celular dentro de la caja de su
+clúster. La figura 3 ilustra la composición.
 
 ![Figura 3. Movilidad jerárquica: la posición absoluta es la suma de zona, clúster y nodo.](diagramas/movilidad.png)
 
-Los modelos de movilidad por nivel son los siguientes. En el nivel 2 (zona), un
+Los modelos de movilidad por capa son los siguientes. En la zona, un
 `ConstantPositionMobilityModel` anclado en el origen de la zona ((0,0) para sur, (0,150) para norte);
-es fijo. En el nivel 1 (clúster), para un BUS se usa `WaypointMobilityModel` siguiendo la ruta
+es fijo. En el clúster, para un BUS se usa `WaypointMobilityModel` siguiendo la ruta
 rectangular con paradas, y para un GROUP, `RandomWaypointMobilityModel` con rapidez uniforme en
 [`groupSpeedMin`, `groupSpeedMax`] y pausa uniforme en [0, `groupPause`]; si `clusterMobility=false`,
 la referencia del clúster queda fija en su posición de inicio. En el nivel de nodo (celular), un

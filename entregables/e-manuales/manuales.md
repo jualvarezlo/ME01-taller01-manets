@@ -26,13 +26,13 @@ ad hoc estima dónde está el perro, y el dueño consulta esa estimación a trav
 análogo a "Find My" de Apple, y sirve de excusa para estudiar modelos de movilidad grupal en una MANET
 jerárquica [1].
 
-La simulación recrea 32 celulares en un área de 500 × 300 m, organizados en una jerarquía de dos
-niveles:
+La simulación recrea 32 celulares en un área de 500 × 300 m, organizados en una jerarquía con dos
+niveles de agrupamiento (el primer nivel son los clústeres y el segundo las zonas):
 
 | Nivel | Qué es | Cuántos |
 |---|---|---|
-| 2 | Zonas: `sur` (y de 0 a 150 m) y `norte` (y de 150 a 300 m) | 2 |
-| 1 | Clústeres: `bus-norte` y `plaza` en el norte, `bus-sur` y `paseador` en el sur | 4 |
+| Primer nivel | Clústeres: `bus-norte` y `plaza` en el norte, `bus-sur` y `paseador` en el sur | 4 |
+| Segundo nivel | Zonas: `sur` (y de 0 a 150 m) y `norte` (y de 150 a 300 m) | 2 |
 | nodo | Celulares, 8 por clúster | 32 |
 
 El perro es un nodo aparte que deambula al azar a 0.3 m/s. La posición de cada celular es la suma de tres
@@ -469,8 +469,8 @@ La posición absoluta de cada celular es la suma de tres capas, armada con `Hier
 
 | Nivel | Qué es | Cuántos | Modelo de movilidad |
 |---|---|---|---|
-| 2 | Zonas: `sur` (y ∈ [0,150)), `norte` (y ∈ [150,300)) | 2 | `ConstantPositionMobilityModel` (origen de la zona) |
-| 1 | Clústeres | 4 | bus → `WaypointMobilityModel`; grupo → `RandomWaypointMobilityModel` |
+| Primer nivel | Clústeres | 4 | bus → `WaypointMobilityModel`; grupo → `RandomWaypointMobilityModel` |
+| Segundo nivel | Zonas: `sur` (y ∈ [0,150)), `norte` (y ∈ [150,300)) | 2 | `ConstantPositionMobilityModel` (origen de la zona) |
 | nodo | Celulares, 8 por clúster | 32 | `RandomWalk2dMobilityModel` dentro de la caja del clúster |
 
 El clúster se arma como un `HierarchicalMobilityModel` con `SetParent(zona)` y `SetChild(movilidad

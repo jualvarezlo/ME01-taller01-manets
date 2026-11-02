@@ -23,19 +23,21 @@ Lo interesante del problema no es tanto el collar como la forma en que se mueven
 Los celulares no deambulan de manera independiente: viajan en grupos que se desplazan como un
 bloque, los pasajeros de un bus, la gente reunida en una plaza, un paseador con su grupo de perros,
 y dentro de cada grupo cada persona se mueve un poco por su cuenta. Esa estructura motiva un sistema
-jerárquico de tres capas, en el que la posición absoluta de cada celular es la suma de una zona
-fija (sur, con y entre 0 y 150 m, y norte, con y entre 150 y 300 m), un clúster que se desplaza como
-bloque (cuatro en total: bus-norte y plaza en el norte, bus-sur y paseador en el sur) y el propio
-celular, que camina al azar dentro de la caja de su clúster (8 por clúster, 32 en total).
+jerárquico con dos niveles de agrupamiento sobre los nodos. El primer nivel son los clústeres (cuatro
+en total: bus-norte y plaza en el norte, bus-sur y paseador en el sur) y el segundo son las zonas
+(sur, con y entre 0 y 150 m, y norte, con y entre 150 y 300 m). La posición absoluta de cada celular
+se compone entonces de tres aportes: la zona, que es fija; el clúster, que se desplaza como bloque; y
+el propio celular, que camina al azar dentro de la caja de su clúster (8 por clúster, 32 en total).
 
 El área simulada es de 500 × 300 m. Los buses recorren una ruta rectangular a 6 m/s con paradas de
 20 s en cada esquina, y los grupos a pie van de un punto al azar a otro. El perro es un nodo aparte,
 que no pertenece a ningún clúster y camina al azar a 0.3 m/s. Toda la simulación se construye en
 NS-3 3.46.1 (C++) [2], [4], y el análisis posterior en Python.
 
-Esta jerarquía cumple la regla del taller de tener al menos tres clústeres en el primer nivel y dos
-en el segundo, con movimiento tanto de clústeres como de nodos. Y plantea la tensión central del
-problema: moverse ayuda a oír, pero puede dañar la geometría de la medición.
+Esta jerarquía cumple con holgura la regla del enunciado de tener al menos tres clústeres en el
+primer nivel (aquí son cuatro) y dos en el segundo (las dos zonas), con movimiento tanto de clústeres
+como de nodos. Y plantea la tensión central del problema: moverse ayuda a oír, pero puede dañar la
+geometría de la medición.
 
 ## 2. Pregunta de investigación
 
@@ -184,20 +186,19 @@ consecuencia, promediar lecturas ayuda más en la simulación que en la vida rea
 Las lecturas lejanas están sesgadas. Lejos del collar solo se decodifican los beacons que tuvieron un
 sombreado favorable, porque los débiles se pierden bajo el umbral de sensibilidad. Las lecturas
 lejanas salen así más fuertes de lo que deberían: al ajustar RSSI contra distancia, el exponente
-aparente baja a cerca de 1.6, frente al 2.7 del modelo, y la trilateración subestima distancias. Sin
-sombreado (`shadowSigmaDb=0`) el ajuste recupera el 2.7 exacto.
+aparente resulta menor que el real y la trilateración tiende a subestimar distancias. Sin sombreado
+(`shadowSigmaDb=0`) el ajuste recupera el exponente exacto del modelo.
 
-La pila de red introduce artefactos. ns-3 guarda solo 3 paquetes por vecino mientras resuelve
-direcciones con ARP; los relevos salen en ráfaga, por lo que con AODV se perdía cerca del 40 %. Subir
-esa cola a 64 (`arpQueue`) elevó la entrega con AODV del 57 % al 93 %. Además, las rutas de AODV
-vencen a los 3 s mientras las consultas llegan cada 10 s aproximadamente, lo que dejaba cerca del
-22 % de las consultas sin respuesta; con OLSR y DSDV, entre 1 % y 7 %. Son observaciones de las
-pruebas de desarrollo, útiles como contexto para elegir y comparar protocolos.
+La pila de red introduce artefactos. ns-3 guarda por defecto pocos paquetes por vecino mientras
+resuelve direcciones con ARP; como los relevos salen en ráfaga, parte de ellos se perdían, sobre todo
+con AODV. Por eso se amplió esa cola con el parámetro `arpQueue`. Además, las rutas de AODV caducan a
+los pocos segundos, mientras que las consultas del dueño llegan más espaciadas, de modo que una
+consulta puede encontrar la ruta vencida y quedar sin respuesta con más frecuencia que con OLSR o
+DSDV, que mantienen las rutas. El efecto cuantitativo de estos factores se mide en el literal f.
 
 La fusión `none` sesga la estimación. Con el valor por defecto, cada cabeza de zona solo ve las
 lecturas de su lado y su estimación se carga hacia su zona. Las alternativas `raw` y `merge` corrigen
-eso a costa de más tráfico; `raw` llegó a bajar la entrega de relevos del 99 % al 67 % en una prueba,
-por lo que el diseño debe tener en cuenta ese compromiso.
+eso a costa de más tráfico, un compromiso que el diseño debe tener en cuenta.
 
 Hay cosas que quedan por fuera. No se mide la distancia por tiempo de vuelo (Wi-Fi FTM), que ns-3 no
 modela bien, y queda como posible trabajo futuro. Tampoco se modelan paradas donde suban o bajen

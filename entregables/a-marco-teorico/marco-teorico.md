@@ -66,19 +66,23 @@ jerárquicas de dos y tres niveles, los autores estiman ese factor, lo modelan c
 lineal entre capas y obtienen un valor cercano a la razón áurea $\varphi = \tfrac{1+\sqrt{5}}{2}$
 con un nivel de confianza del 95 % [3].
 
-El sistema de este taller adopta una organización jerárquica de dos niveles sobre los nodos:
+El sistema de este taller adopta una organización jerárquica de dos niveles de agrupamiento sobre
+los nodos. Siguiendo la nomenclatura del enunciado, el primer nivel lo forman los clústeres y el
+segundo las zonas:
 
 | Nivel | Qué agrupa | Cuántos |
 |---|---|---|
-| 2 | Zonas geográficas (sur y norte) | 2 |
-| 1 | Clústeres (buses y grupos de personas) | 4 |
-| nodo | Celulares observadores | 8 por clúster |
+| Primer nivel | Clústeres (buses y grupos de personas) | 4 |
+| Segundo nivel | Zonas geográficas (sur y norte) | 2 |
+| nodo | Celulares observadores (8 por clúster) | 32 |
 
+Hay, entonces, cuatro clústeres en el primer nivel y dos zonas en el segundo, lo que satisface y
+supera el requisito del enunciado de al menos tres clústeres en el primer nivel y dos en el segundo.
 Cada clúster tiene una cabeza (su nodo 0) que recibe los reportes de sus celulares. Cada zona toma
-como cabeza a la de uno de sus clústeres, y son esas cabezas de zona las que estiman la posición
-del collar y responden las consultas. La estructura de cuatro clústeres en el primer nivel y dos
-zonas en el segundo reproduce, a la escala del experimento, la idea de capas con funciones
-diferenciadas de [3], y es también el origen de la movilidad grupal que se analiza en la Sección 3.
+como cabeza a la de uno de sus clústeres, y son esas cabezas de zona las que estiman la posición del
+collar y responden las consultas. Esta estructura reproduce, a la escala del experimento, la idea de
+capas con funciones diferenciadas de [3], y es también el origen de la movilidad grupal que se
+analiza en la Sección 3.
 
 ## 3. Modelos de movilidad
 

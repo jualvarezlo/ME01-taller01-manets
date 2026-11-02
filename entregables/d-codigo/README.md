@@ -7,8 +7,9 @@ va en el correo y la tabla de versiones.
 Para armar el zip sin resultados ni compilados, desde la raíz del repositorio:
 
 ```bash
-zip -r entregables/d-codigo/Taller01_MANETs_d_codigo.zip codigo instalar.sh INSTALACION.md \
-    -x 'codigo/resultados/*' -x '*.so' -x '*/__pycache__/*'
+zip -r entregables/d-codigo/Taller01_MANETs_d_codigo.zip \
+    codigo instalar.sh INSTALACION.md \
+    -x '*/resultados/*' '*.so' '*/__pycache__/*' '*.pyc' '*.DS_Store'
 ```
 
 Versiones con las que se desarrolló, medidas el 29 de octubre de 2026 en un Mac con Apple silicon:
