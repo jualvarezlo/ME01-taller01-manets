@@ -1,0 +1,143 @@
+<mxfile host="65bd71144e">
+    <diagram id="flujocabeza" name="FlujoCabezaZona">
+        <mxGraphModel dx="1287" dy="1037" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="960" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title" parent="1" style="text;html=1;fontSize=14;fontStyle=1;align=center;" value="Flujo de la cabeza de zona: EstimateTick (periódico) y BestEstimate (al consultar)" vertex="1">
+                    <mxGeometry height="30" width="960" x="150" y="15" as="geometry"/>
+                </mxCell>
+                <mxCell id="colA" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;verticalAlign=top;spacingTop=6;dashed=1;" value="EstimateTick(cabeza de zona) — cada estInterval (5 s)" vertex="1">
+                    <mxGeometry height="890" width="520" x="40" y="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="a_start" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="Disparo del temporizador (cada 5 s)" vertex="1">
+                    <mxGeometry height="50" width="280" x="140" y="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="a1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666;" value="Descartar lecturas con t ≤ ahora − estWindow (10 s); conservar solo la ventana reciente" vertex="1">
+                    <mxGeometry height="60" width="320" x="120" y="170" as="geometry"/>
+                </mxCell>
+                <mxCell id="a2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666;" value="Contar observadores distintos en la ventana" vertex="1">
+                    <mxGeometry height="45" width="280" x="140" y="260" as="geometry"/>
+                </mxCell>
+                <mxCell id="a3" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="estimator?" vertex="1">
+                    <mxGeometry height="80" width="180" x="190" y="335" as="geometry"/>
+                </mxCell>
+                <mxCell id="a3cpp" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666;" value="cpp: Estimar() en estimador.h" vertex="1">
+                    <mxGeometry height="45" width="180" x="40" y="415" as="geometry"/>
+                </mxCell>
+                <mxCell id="a3py" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666;" value="python: pasar ventana por ns3-ai y esperar resultado" vertex="1">
+                    <mxGeometry height="45" width="210" x="350" y="420" as="geometry"/>
+                </mxCell>
+                <mxCell id="a4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666;" value="Registrar la estimación en estimaciones_red.csv (con error contra la posición real del perro)" vertex="1">
+                    <mxGeometry height="55" width="320" x="120" y="520" as="geometry"/>
+                </mxCell>
+                <mxCell id="a5" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="¿resultado válido?" vertex="1">
+                    <mxGeometry height="70" width="160" x="200" y="600" as="geometry"/>
+                </mxCell>
+                <mxCell id="a6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="Guardar como estimación propia (own): t, x, y, observadores, zona" vertex="1">
+                    <mxGeometry height="55" width="320" x="120" y="700" as="geometry"/>
+                </mxCell>
+                <mxCell id="a8" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="Reprogramar EstimateTick (+5 s)" vertex="1">
+                    <mxGeometry height="40" width="240" x="150" y="900" as="geometry"/>
+                </mxCell>
+                <mxCell id="ea0" edge="1" parent="1" source="a_start" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="a1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ea1" edge="1" parent="1" source="a1" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="a2">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ea2" edge="1" parent="1" source="a2" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="a3">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ea3a" edge="1" parent="1" source="a3" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" target="a3cpp" value="cpp">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ea3b" edge="1" parent="1" source="a3" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" target="a3py" value="python">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ea4a" edge="1" parent="1" source="a3cpp" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" target="a4">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ea4b" edge="1" parent="1" source="a3py" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" target="a4">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ea5" edge="1" parent="1" source="a4" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="a5">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ea6" edge="1" parent="1" source="a5" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="a6" value="sí">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ea7" edge="1" parent="1" source="a6" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="a7">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ea8" edge="1" parent="1" source="a7" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="a8">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ea5no" edge="1" parent="1" source="a5" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;exitX=1;exitY=0.5;" target="a8" value="no → solo reprogramar">
+                    <mxGeometry relative="1" x="0.1111" y="-10" as="geometry">
+                        <mxPoint as="offset"/>
+                        <Array as="points">
+                            <mxPoint x="480" y="635"/>
+                            <mxPoint x="480" y="920"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="colB" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;verticalAlign=top;spacingTop=6;dashed=1;" value="BestEstimate(app) — al recibir una consulta Q" vertex="1">
+                    <mxGeometry height="742.5" width="660" x="610" y="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="b_start" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="Llega Q (consulta del dueño)" vertex="1">
+                    <mxGeometry height="45" width="240" x="770" y="95" as="geometry"/>
+                </mxCell>
+                <mxCell id="b1" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="¿own y remote frescas? (edad ≤ estWindow)" vertex="1">
+                    <mxGeometry height="90" width="260" x="760" y="165" as="geometry"/>
+                </mxCell>
+                <mxCell id="b2" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="zoneFusion = merge?" vertex="1">
+                    <mxGeometry height="80" width="200" x="640" y="290" as="geometry"/>
+                </mxCell>
+                <mxCell id="b3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" value="Fusión: promedio de x,y ponderado por observadores; edad = la de la más vieja" vertex="1">
+                    <mxGeometry height="70" width="180" x="650" y="490" as="geometry"/>
+                </mxCell>
+                <mxCell id="b4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666;" value="Elegir la de más observadores; si empatan, la más reciente" vertex="1">
+                    <mxGeometry height="80" width="170" x="875" y="440" as="geometry"/>
+                </mxCell>
+                <mxCell id="b5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666;" value="Alguna estimación vieja: usar la más reciente (o la única válida)" vertex="1">
+                    <mxGeometry height="90" width="240" x="1000" y="305" as="geometry"/>
+                </mxCell>
+                <mxCell id="b6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="Enviar A (respuesta) al dueño con la estimación elegida" vertex="1">
+                    <mxGeometry height="55" width="260" x="740" y="700" as="geometry"/>
+                </mxCell>
+                <mxCell id="eb0" edge="1" parent="1" source="b_start" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="b1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eb1y" edge="1" parent="1" source="b1" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="b2" value="ambas frescas">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eb1n" edge="1" parent="1" source="b1" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="b5" value="no">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eb2y" edge="1" parent="1" source="b2" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="b3" value="sí">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eb2n" edge="1" parent="1" source="b2" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="b4" value="none / raw">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eb3" edge="1" parent="1" source="b3" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="b6">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eb4" edge="1" parent="1" source="b4" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="b6">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eb5" edge="1" parent="1" source="b5" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="b6">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="1120" y="727.5"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="a7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" value="Enviar E (intercambio) a la otra cabeza de zona" vertex="1">
+                    <mxGeometry height="45" width="280" x="40" y="780" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
