@@ -1,0 +1,64 @@
+<mxfile host="65bd71144e">
+    <diagram id="movilidad" name="Movilidad">
+        <mxGraphModel dx="1082" dy="871" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1150" pageHeight="700" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title" parent="1" style="text;html=1;fontSize=15;fontStyle=1;align=center;" value="Modelo de movilidad jerárquico: posición absoluta = zona + clúster + nodo" vertex="1">
+                    <mxGeometry height="30" width="860" x="140" y="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="L2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=center;" value="Nivel 2 — Zona&#xa;ConstantPositionMobilityModel&#xa;origen de la zona (0,0) o (0,150)" vertex="1">
+                    <mxGeometry height="90" width="240" x="80" y="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="L1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=center;" value="Nivel 1 — Clúster (referencia)&#xa;BUS: WaypointMobilityModel&#xa;GROUP: RandomWaypointMobilityModel&#xa;(fijo si clusterMobility=false)" vertex="1">
+                    <mxGeometry height="100" width="240" x="80" y="280" as="geometry"/>
+                </mxCell>
+                <mxCell id="L0" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=center;" value="Nivel nodo — Celular&#xa;RandomWalk2dMobilityModel&#xa;dentro de la caja del clúster&#xa;(fijo si nodeMobility=false)" vertex="1">
+                    <mxGeometry height="100" width="240" x="80" y="490" as="geometry"/>
+                </mxCell>
+                <mxCell id="h1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=center;fontSize=11;" value="HierarchicalMobilityModel&#xa;SetParent(zona) · SetChild(mov. clúster)" vertex="1">
+                    <mxGeometry height="40" width="280" x="60" y="210" as="geometry"/>
+                </mxCell>
+                <mxCell id="h2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=center;fontSize=11;" value="HierarchicalMobilityModel&#xa;SetParent(ref. clúster) · SetChild(mov. nodo)" vertex="1">
+                    <mxGeometry height="40" width="280" x="60" y="410" as="geometry"/>
+                </mxCell>
+                <mxCell id="ea1" edge="1" parent="1" source="L2" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="h1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ea2" edge="1" parent="1" source="h1" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="L1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ea3" edge="1" parent="1" source="L1" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="h2">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ea4" edge="1" parent="1" source="h2" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="L0">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="sumBox" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;verticalAlign=top;spacingTop=6;" value="Suma vectorial de la posición" vertex="1">
+                    <mxGeometry height="380" width="620" x="470" y="180" as="geometry"/>
+                </mxCell>
+                <mxCell id="vz" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=center;" value="p_zona&#xa;(origen fijo)" vertex="1">
+                    <mxGeometry height="60" width="130" x="500" y="240" as="geometry"/>
+                </mxCell>
+                <mxCell id="plus1" parent="1" style="text;html=1;fontSize=28;align=center;" value="+" vertex="1">
+                    <mxGeometry height="40" width="40" x="640" y="250" as="geometry"/>
+                </mxCell>
+                <mxCell id="vc" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=center;" value="p_clúster(t)&#xa;(ruta / waypoints)" vertex="1">
+                    <mxGeometry height="60" width="140" x="690" y="240" as="geometry"/>
+                </mxCell>
+                <mxCell id="plus2" parent="1" style="text;html=1;fontSize=28;align=center;" value="+" vertex="1">
+                    <mxGeometry height="40" width="40" x="840" y="250" as="geometry"/>
+                </mxCell>
+                <mxCell id="vn" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=center;" value="p_nodo(t)&#xa;(caminata en la caja)" vertex="1">
+                    <mxGeometry height="60" width="150" x="890" y="240" as="geometry"/>
+                </mxCell>
+                <mxCell id="eq" parent="1" style="text;html=1;fontSize=14;fontStyle=1;align=center;" value="posición absoluta del celular  =  p_zona  +  p_clúster(t)  +  p_nodo(t)" vertex="1">
+                    <mxGeometry height="30" width="560" x="500" y="350" as="geometry"/>
+                </mxCell>
+                <mxCell id="note" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;align=left;spacingLeft=10;verticalAlign=middle;" value="Interruptores del experimento:&#xa;clusterMobility → mueve/congela p_clúster(t)&#xa;nodeMobility → mueve/congela p_nodo(t)&#xa;4 combinaciones: estático, solo-nodo, solo-clúster, clúster+nodo" vertex="1">
+                    <mxGeometry height="120" width="560" x="500" y="410" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

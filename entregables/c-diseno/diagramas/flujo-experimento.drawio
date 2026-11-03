@@ -1,0 +1,82 @@
+<mxfile host="65bd71144e">
+    <diagram id="flujoexperimento" name="FlujoExperimento">
+        <mxGraphModel dx="1143" dy="920" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="900" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title" parent="1" style="text;html=1;fontSize=14;fontStyle=1;align=center;" value="Flujo del experimento (experimento.py): diseño factorial con réplicas en paralelo" vertex="1">
+                    <mxGeometry height="30" width="960" x="120" y="15" as="geometry"/>
+                </mxCell>
+                <mxCell id="start" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="python experimento.py --nombre ... --reps R --routing ..." vertex="1">
+                    <mxGeometry height="50" width="360" x="420" y="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="build" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666;" value="(opcional) compilar: ./ns3 build collar-sim" vertex="1">
+                    <mxGeometry height="40" width="300" x="450" y="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="grid" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=center;" value="Producto cartesiano de los factores:&#xa;4 combinaciones de movilidad × protocolos de enrutamiento × R réplicas&#xa;(estático, solo-nodo, solo-clúster, clúster+nodo)" vertex="1">
+                    <mxGeometry height="80" width="540" x="330" y="210" as="geometry"/>
+                </mxCell>
+                <mxCell id="pool" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;align=center;" value="ThreadPoolExecutor: lanzar las corridas en paralelo (jobs ≈ núcleos − 1; la mitad con estimador python)" vertex="1">
+                    <mxGeometry height="60" width="540" x="330" y="320" as="geometry"/>
+                </mxCell>
+                <mxCell id="runbox" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666;verticalAlign=top;fontStyle=1;spacingTop=6;dashed=1;" value="Por cada corrida (routing, combinación, réplica rep)" vertex="1">
+                    <mxGeometry height="300" width="960" x="120" y="410" as="geometry"/>
+                </mxCell>
+                <mxCell id="r1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666;align=center;" value="Ejecutar collar-sim con&#xa;--clusterMobility, --nodeMobility, --routing, --RngRun=rep, --outDir" vertex="1">
+                    <mxGeometry height="70" width="360" x="160" y="450" as="geometry"/>
+                </mxCell>
+                <mxCell id="r2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666;align=center;" value="localizar.analizar(): estimación de referencia&#xa;offline con todas las lecturas → error por método" vertex="1">
+                    <mxGeometry height="60" width="360" x="160" y="550" as="geometry"/>
+                </mxCell>
+                <mxCell id="r3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666;align=center;" value="red.resumir_red(): entrega, latencia y&#xa;consultas a través de la MANET" vertex="1">
+                    <mxGeometry height="55" width="360" x="160" y="630" as="geometry"/>
+                </mxCell>
+                <mxCell id="r4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=center;" value="Filas de resultados&#xa;(una por corrida y método / una por corrida)" vertex="1">
+                    <mxGeometry height="70" width="360" x="620" y="500" as="geometry"/>
+                </mxCell>
+                <mxCell id="join" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=center;" value="Reunir todas las corridas: ordenar, escribir&#xa;experimento.csv y experimento_red.csv" vertex="1">
+                    <mxGeometry height="60" width="540" x="330" y="740" as="geometry"/>
+                </mxCell>
+                <mxCell id="tables" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=center;" value="Imprimir tablas: media ± desviación entre réplicas&#xa;(error de localización, entrega, latencia, consultas, edad y error de la respuesta)" vertex="1">
+                    <mxGeometry height="55" width="540" x="330" y="830" as="geometry"/>
+                </mxCell>
+                <mxCell id="e0" edge="1" parent="1" source="start" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="build">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e1" edge="1" parent="1" source="build" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="grid">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e2" edge="1" parent="1" source="grid" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="pool">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e3" edge="1" parent="1" source="pool" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="r1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e4" edge="1" parent="1" source="r1" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="r2">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e5" edge="1" parent="1" source="r2" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="r3">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e6" edge="1" parent="1" source="r3" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="r4">
+                    <mxGeometry relative="1" x="0.1237" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="760" y="657.5"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e7" edge="1" parent="1" source="r4" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="join">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="800" y="690"/>
+                            <mxPoint x="600" y="690"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e8" edge="1" parent="1" source="join" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="tables">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

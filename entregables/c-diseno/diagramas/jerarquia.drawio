@@ -1,0 +1,85 @@
+<mxfile host="65bd71144e">
+    <diagram id="jerarquia" name="Jerarquia">
+        <mxGraphModel dx="1038" dy="836" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1150" pageHeight="820" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title" parent="1" style="text;html=1;fontSize=15;fontStyle=1;align=center;" value="Jerarquía: 2 zonas · 4 clústeres · 8 celulares por clúster · 32 celulares + perro aparte" vertex="1">
+                    <mxGeometry height="30" width="900" x="120" y="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="root" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=1;" value="Escenario 500 × 300 m" vertex="1">
+                    <mxGeometry height="40" width="200" x="470" y="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="zn" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;align=center;" value="Zona norte  (y ∈ [150,300))&#xa;ConstantPosition, origen (0,150)&#xa;cabeza de zona = cabeza de plaza" vertex="1">
+                    <mxGeometry height="70" width="300" x="140" y="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="zs" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;align=center;" value="Zona sur  (y ∈ [0,150))&#xa;ConstantPosition, origen (0,0)&#xa;cabeza de zona = cabeza de paseador" vertex="1">
+                    <mxGeometry height="70" width="300" x="700" y="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="cbn" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=center;fontSize=11;" value="bus-norte (BUS)&#xa;Waypoint, ruta rectangular&#xa;caja 6.0×1.5 m, nodo 0.5 m/s&#xa;(dueño viaja aquí, ownerCluster=0)" vertex="1">
+                    <mxGeometry height="90" width="200" x="100" y="290" as="geometry"/>
+                </mxCell>
+                <mxCell id="cpl" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=center;fontSize=11;" value="plaza (GROUP)&#xa;RandomWaypoint&#xa;caja 10.0×10.0 m, nodo 1.0 m/s&#xa;★ cabeza de zona norte" vertex="1">
+                    <mxGeometry height="90" width="200" x="330" y="290" as="geometry"/>
+                </mxCell>
+                <mxCell id="cbs" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=center;fontSize=11;" value="bus-sur (BUS)&#xa;Waypoint, ruta rectangular&#xa;caja 6.0×1.5 m, nodo 0.5 m/s" vertex="1">
+                    <mxGeometry height="90" width="200" x="660" y="290" as="geometry"/>
+                </mxCell>
+                <mxCell id="cpa" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=center;fontSize=11;" value="paseador (GROUP)&#xa;RandomWaypoint&#xa;caja 3.0×3.0 m, nodo 0.8 m/s&#xa;★ cabeza de zona sur" vertex="1">
+                    <mxGeometry height="90" width="200" x="890" y="290" as="geometry"/>
+                </mxCell>
+                <mxCell id="nodes" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;align=center;" value="8 celulares (RandomWalk2d dentro de la caja del clúster)" vertex="1">
+                    <mxGeometry height="40" width="200" x="330" y="440" as="geometry"/>
+                </mxCell>
+                <mxCell id="n0" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=10;" value="nodo 0&#xa;(cabeza clúster)" vertex="1">
+                    <mxGeometry height="60" width="80" x="300" y="520" as="geometry"/>
+                </mxCell>
+                <mxCell id="n1" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d79b00;fontSize=10;" value="nodo 1" vertex="1">
+                    <mxGeometry height="60" width="60" x="390" y="520" as="geometry"/>
+                </mxCell>
+                <mxCell id="n2" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d79b00;fontSize=10;" value="…" vertex="1">
+                    <mxGeometry height="60" width="60" x="460" y="520" as="geometry"/>
+                </mxCell>
+                <mxCell id="n7" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d79b00;fontSize=10;" value="nodo 7" vertex="1">
+                    <mxGeometry height="60" width="60" x="530" y="520" as="geometry"/>
+                </mxCell>
+                <mxCell id="dog" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=center;fontStyle=1;" value="Collar del perro&lt;br&gt;nodo aparte, sin clúster&lt;br&gt;RandomWalk2d 0.3 m/s (o fijo)" vertex="1">
+                    <mxGeometry height="70" width="200" x="680" y="500" as="geometry"/>
+                </mxCell>
+                <mxCell id="er1" edge="1" parent="1" source="root" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="zn">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="er2" edge="1" parent="1" source="root" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="zs">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ez1" edge="1" parent="1" source="zn" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="cbn">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ez2" edge="1" parent="1" source="zn" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="cpl">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ez3" edge="1" parent="1" source="zs" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="cbs">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ez4" edge="1" parent="1" source="zs" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="cpa">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ec1" edge="1" parent="1" source="cpl" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="nodes">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="en0" edge="1" parent="1" source="nodes" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=none;" target="n0">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="en1" edge="1" parent="1" source="nodes" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=none;" target="n1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="en2" edge="1" parent="1" source="nodes" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=none;" target="n2">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="en7" edge="1" parent="1" source="nodes" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=none;" target="n7">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

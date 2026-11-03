@@ -1,0 +1,100 @@
+<mxfile host="app.diagrams.net" modified="2026-10-01T00:00:00.000Z" agent="kiro" version="21.0.0" type="device">
+  <diagram id="mensajes" name="Mensajes">
+    <mxGraphModel dx="1100" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="title" value="Protocolo de mensajes de aplicación (UDP sobre AODV/OLSR/DSDV): R, V, E, Q, A, X" style="text;html=1;fontSize=14;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="120" y="15" width="960" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Actores (cabeceras de línea de vida) -->
+        <mxCell id="aCel" value="Celular&#10;(observador)" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;fillColor=#dae8fc;strokeColor=#6c8ebf;size=50;" vertex="1" parent="1">
+          <mxGeometry x="80" y="60" width="120" height="760" as="geometry" />
+        </mxCell>
+        <mxCell id="aCH" value="Cabeza de&#10;clúster" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;fillColor=#d5e8d4;strokeColor=#82b366;size=50;" vertex="1" parent="1">
+          <mxGeometry x="290" y="60" width="120" height="760" as="geometry" />
+        </mxCell>
+        <mxCell id="aZH" value="Cabeza de&#10;zona A" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;fillColor=#ffe6cc;strokeColor=#d79b00;size=50;" vertex="1" parent="1">
+          <mxGeometry x="500" y="60" width="120" height="760" as="geometry" />
+        </mxCell>
+        <mxCell id="aZH2" value="Cabeza de&#10;zona B" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;fillColor=#ffe6cc;strokeColor=#d79b00;size=50;" vertex="1" parent="1">
+          <mxGeometry x="710" y="60" width="120" height="760" as="geometry" />
+        </mxCell>
+        <mxCell id="aOwner" value="Dueño" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;fillColor=#f8cecc;strokeColor=#b85450;size=50;" vertex="1" parent="1">
+          <mxGeometry x="930" y="60" width="120" height="760" as="geometry" />
+        </mxCell>
+
+        <!-- R: celular -> cabeza clúster -->
+        <mxCell id="mR" value="R reporte (cada lectura, tras jitter 0–100 ms)" style="html=1;verticalAlign=bottom;endArrow=block;startArrow=none;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="140" y="150" as="sourcePoint" />
+            <mxPoint x="350" y="150" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- V: cabeza cluster -> cabeza zona -->
+        <mxCell id="mV" value="V relevo (al recibir un R)" style="html=1;verticalAlign=bottom;endArrow=block;startArrow=none;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="350" y="210" as="sourcePoint" />
+            <mxPoint x="560" y="210" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="noteV" value="Si la cabeza de clúster ya es cabeza de zona, el reporte se entrega localmente (DeliverReport)." style="text;html=1;fontSize=10;align=left;" vertex="1" parent="1">
+          <mxGeometry x="300" y="225" width="320" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- X: raw -->
+        <mxCell id="mX" value="X cruda (cada lectura, solo zoneFusion=raw)" style="html=1;verticalAlign=bottom;endArrow=block;startArrow=none;dashed=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="560" y="300" as="sourcePoint" />
+            <mxPoint x="770" y="300" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- EstimateTick marca -->
+        <mxCell id="tick" value="cada estInterval (5 s): filtra ventana estWindow (10 s) y estima" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;align=center;" vertex="1" parent="1">
+          <mxGeometry x="470" y="360" width="180" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- E: intercambio -->
+        <mxCell id="mE" value="E intercambio (cada estimación: zona,t,x,y,observadores)" style="html=1;verticalAlign=bottom;endArrow=block;startArrow=none;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="560" y="440" as="sourcePoint" />
+            <mxPoint x="770" y="440" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mE2" value="E intercambio (recíproco)" style="html=1;verticalAlign=bottom;endArrow=block;startArrow=none;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="770" y="475" as="sourcePoint" />
+            <mxPoint x="560" y="475" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Q: dueño -> cabeza zona -->
+        <mxCell id="mQ" value="Q consulta (cada queryInterval, uniforme 0.5×–1.5×)" style="html=1;verticalAlign=bottom;endArrow=block;startArrow=none;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="990" y="560" as="sourcePoint" />
+            <mxPoint x="560" y="560" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="best" value="BestEstimate(): elige o combina según zoneFusion" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;align=center;" vertex="1" parent="1">
+          <mxGeometry x="470" y="580" width="180" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- A: respuesta -->
+        <mxCell id="mA" value="A respuesta (mejor estimación: x, y, t, observadores, zona)" style="html=1;verticalAlign=bottom;endArrow=block;startArrow=none;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="560" y="650" as="sourcePoint" />
+            <mxPoint x="990" y="650" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="legend" value="Leyenda:  línea sólida = por cada evento/periodo;  línea discontinua = solo con zoneFusion=raw." style="text;html=1;fontSize=10;align=left;" vertex="1" parent="1">
+          <mxGeometry x="80" y="770" width="700" height="20" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

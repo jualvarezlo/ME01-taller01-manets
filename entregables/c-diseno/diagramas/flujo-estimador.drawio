@@ -1,0 +1,100 @@
+<mxfile host="65bd71144e">
+    <diagram id="flujoestimador" name="FlujoEstimador">
+        <mxGraphModel dx="1156" dy="931" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="980" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title" parent="1" style="text;html=1;fontSize=14;fontStyle=1;align=center;" value="Flujo del estimador (estimador.h / localizar.py): cercano, centroide, trilateración" vertex="1">
+                    <mxGeometry height="30" width="960" x="120" y="15" as="geometry"/>
+                </mxCell>
+                <mxCell id="start" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="Estimar(lecturas, método, p0, n)" vertex="1">
+                    <mxGeometry height="50" width="260" x="470" y="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="empty" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="¿lecturas vacías?" vertex="1">
+                    <mxGeometry height="70" width="200" x="500" y="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="invalid" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="Resultado no válido" vertex="1">
+                    <mxGeometry height="40" width="180" x="760" y="155" as="geometry"/>
+                </mxCell>
+                <mxCell id="method" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="¿método?" vertex="1">
+                    <mxGeometry height="80" width="200" x="500" y="250" as="geometry"/>
+                </mxCell>
+                <mxCell id="c1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=center;" value="CERCANO&#xa;devolver la posición GPS de la lectura con mayor RSSI" vertex="1">
+                    <mxGeometry height="80" width="240" x="40" y="380" as="geometry"/>
+                </mxCell>
+                <mxCell id="ce1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=center;" value="CENTROIDE&#xa;peso wᵢ = 10^(RSSIᵢ/10) (potencia lineal, mW)&#xa;x̂ = Σ wᵢ xᵢ / Σ wᵢ ,  ŷ = Σ wᵢ yᵢ / Σ wᵢ" vertex="1">
+                    <mxGeometry height="100" width="300" x="320" y="370" as="geometry"/>
+                </mxCell>
+                <mxCell id="t0" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1;align=center;" value="TRILATERACIÓN" vertex="1">
+                    <mxGeometry height="30" width="360" x="770" y="370" as="geometry"/>
+                </mxCell>
+                <mxCell id="t1" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="¿≥ 3 observadores distintos?" vertex="1">
+                    <mxGeometry height="80" width="220" x="840" y="420" as="geometry"/>
+                </mxCell>
+                <mxCell id="t2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666;align=center;" value="Inicializar en el centroide ponderado&#xa;Distancias d̂ᵢ = 10^((p0 − RSSIᵢ)/(10·n))" vertex="1">
+                    <mxGeometry height="60" width="360" x="470" y="510" as="geometry"/>
+                </mxCell>
+                <mxCell id="t3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666;align=center;" value="Gauss-Newton (hasta 50 iteraciones):&#xa;residuo rᵢ = ‖p − pᵢ‖ − d̂ᵢ , peso 1/max(d̂ᵢ,1)²&#xa;resolver (JᵀWJ)Δ = −JᵀWr  (sistema 2×2)" vertex="1">
+                    <mxGeometry height="80" width="360" x="470" y="590" as="geometry"/>
+                </mxCell>
+                <mxCell id="t4" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="¿geometría degenerada?&#xa;(λmax/λmin &gt; 1e8 o λmin ≤ 0)" vertex="1">
+                    <mxGeometry height="90" width="260" x="630" y="760" as="geometry"/>
+                </mxCell>
+                <mxCell id="t5" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="¿‖Δ‖ &lt; 1e-3 o iter = 50?" vertex="1">
+                    <mxGeometry height="90" width="220" x="330" y="760" as="geometry"/>
+                </mxCell>
+                <mxCell id="t6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="Devolver (x, y) estimados" vertex="1">
+                    <mxGeometry height="45" width="200" x="340" y="920" as="geometry"/>
+                </mxCell>
+                <mxCell id="tinvalid" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="Resultado no válido" vertex="1">
+                    <mxGeometry height="45" width="180" x="970" y="820" as="geometry"/>
+                </mxCell>
+                <mxCell id="es" edge="1" parent="1" source="start" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="empty">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ee1" edge="1" parent="1" source="empty" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="invalid" value="sí">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ee2" edge="1" parent="1" source="empty" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="method" value="no">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="em1" edge="1" parent="1" source="method" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="c1" value="cercano">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="em2" edge="1" parent="1" source="method" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="ce1" value="centroide">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="em3" edge="1" parent="1" source="method" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="t0" value="trilateración">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="et0" edge="1" parent="1" source="t0" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="t1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="et1n" edge="1" parent="1" source="t1" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="tinvalid" value="no">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="et1y" edge="1" parent="1" source="t1" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="t2" value="sí">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="et2" edge="1" parent="1" source="t2" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="t3">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="et3" edge="1" parent="1" source="t3" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="t4">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="et4y" edge="1" parent="1" source="t4" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="tinvalid" value="sí">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="et4n" edge="1" parent="1" source="t4" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="t5" value="no">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="et5n" edge="1" parent="1" source="t5" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;exitX=0.5;exitY=0;entryX=0;entryY=0.5;" target="t3" value="no → otra iteración">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="et5y" edge="1" parent="1" source="t5" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="t6" value="sí (converge)">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
