@@ -104,6 +104,8 @@ el comando guardado durante la ejecución.
 ## 3. Resultados por escenario
 
 Las tablas presentan la media entre réplicas y, entre corchetes, su IC95% (límite inferior–superior).
+En particular, los errores y edades medianos son primero calculados dentro de cada corrida y luego
+promediados entre réplicas; no son la mediana de todas las ventanas agrupadas.
 Para comparar los niveles secundarios se fija AODV, movilidad `cluster+nodo`, estimador C++ y
 trilateración; E1 es el nivel base común. Las tablas de localización usan `experimento.csv`; las de
 red, `experimento_red.csv`. Los datos completos por réplica y todos los intervalos están en
@@ -277,71 +279,182 @@ una estimación válida.
 
 ## 4. Análisis
 
-En E1, los tratamientos con movilidad de clúster tienen menor error mediano que los tratamientos sin
-ella en la comparación AODV/trilateración. La configuración `cluster+nodo` combina error mediano de
-52.95 m y frescura media de 0.99 s; `solo-clúster` logra un error similar (48.92 m), pero con menor
-disponibilidad (88.6%) y una frescura mayor (1.70 s). Por tanto, en estos resultados la movilidad
-afecta tanto la geometría de las lecturas como la oportunidad de las estimaciones; no hay una única
-configuración que optimice simultáneamente todas las métricas.
+Las comparaciones de E2–E4 se controlan en AODV, movilidad `cluster+nodo`, estimador C++ y
+trilateración; en cada tabla de sensibilidad se cambia un factor frente a E1. Por ello, describen
+ese tratamiento y no necesariamente el promedio de todas las movilidades, protocolos o métodos.
+Además, `disponibilidad` en `experimento.csv` es la fracción de ventanas en que el método produjo
+una estimación válida; `estimaciones_red_disponibilidad` es la fracción de estimaciones válidas en
+las cabezas de zona, y `consultas_exito` es la fracción de consultas del dueño que recibieron una
+estimación. No son métricas intercambiables. El error y la edad de respuesta se calculan sobre las
+consultas contestadas con una estimación, por lo que deben leerse junto con la tasa de éxito y no
+como si describieran todas las consultas.
 
-El protocolo también se asocia con diferencias en entrega de consultas: para `cluster+nodo`,
-OLSR y DSDV responden alrededor del 95–96% de las consultas frente al 73.8% de AODV. Sus
-intervalos para éxito de consultas no se solapan con el de AODV en esta muestra. A la vez, el
-volumen de bytes de aplicación es mayor con OLSR y DSDV que con AODV. Esta comparación es
-descriptiva para el tratamiento mostrado, no una prueba causal general sobre los protocolos.
+### 4.1 Movilidad, métodos de localización y enrutamiento
 
-En E2, aumentar nodos por clúster no mejora de forma clara el error mediano: los IC de 4, 8 y 16
-nodos se solapan ampliamente. La disponibilidad es mayor con 8 que con 4 o 16 nodos en la
-combinación reportada, y 16 nodos aumenta el tráfico. El beneficio de densidad depende de más que
-el número de observadores; la distribución espacial y las entregas de red también importan.
+En E1, la movilidad de clúster coincide con una reducción grande del error de trilateración en la
+comparación controlada: el error mediano pasa de 121.33 m en estático a 48.92 m con solo clúster y
+52.95 m con clúster+nodo. La movilidad de los nodos por sí sola apenas cambia el error respecto al
+caso estático (119.35 m). No obstante, `solo-clúster` tiene 88.6% de disponibilidad y 1.70 s de
+frescura, frente a 96.3% y 0.99 s con `cluster+nodo`; reducir el error entre las estimaciones
+disponibles no garantiza obtenerlas con la misma frecuencia ni actualidad. En las consultas, además,
+`cluster+nodo` tiene menor éxito que el caso estático (73.8% frente a 81.4%). La movilidad produce,
+por tanto, un compromiso entre geometría útil, disponibilidad y oportunidad de comunicación, no una
+mejora uniforme.
 
-En E3, el sombreado cero produce un error mediano bajo entre las estimaciones disponibles, pero
-solo hay disponibilidad de 44.2% y la frescura media es de 41.7 s. Con sombreado de 8 dB, la
-disponibilidad es completa en esta combinación, pero suben los errores de localización y respuesta.
-La diferencia evidencia por qué error, disponibilidad y edad deben analizarse conjuntamente.
+Los métodos también presentan perfiles distintos. Al promediar las métricas por corrida de las 120
+corridas E1 (4 movilidades × 3 protocolos × 10 réplicas), el error mediano medio por corrida fue
+68.7 m para centroide, 84.3 m para trilateración y 89.2 m para vecino más cercano. En cambio, el
+percentil 90 medio fue 102.1 m, 236.1 m y 120.1 m, respectivamente; la disponibilidad media fue
+99.2% para centroide y vecino más cercano y 96.1% para trilateración. Es un resumen descriptivo
+sin intervalo de confianza y no una comparación ajustada por tratamiento. La diferencia entre
+mediana y percentil 90 de trilateración señala una cola de errores grandes en algunas corridas. En
+el tratamiento AODV/`cluster+nodo`, por ejemplo, su error mediano (52.95 m) es menor que el del
+centroide (58.50 m), pero su percentil 90 es mayor (169.39 m frente a 99.44 m). No hay un método
+que domine todas las métricas y condiciones; la mediana sola puede ocultar errores extremos.
 
-En E4, `raw` reduce el error mediano de respuesta frente a `none` y eleva modestamente el éxito de
-consultas, con mayor tráfico de aplicación. `merge` queda entre ambos en error y mantiene un tráfico
-similar a `none`. Los IC95% del error de `none` y `merge` apenas dejan de solaparse (por unos
-0.26 m); esta separación descriptiva no sustituye una prueba formal.
+El protocolo muestra un efecto más claro sobre la entrega que sobre la precisión de localización.
+En E1/`cluster+nodo`, OLSR y DSDV contestan con estimación el 94.8% y 96.4% de las consultas,
+respectivamente, frente al 73.8% con AODV; sus errores medianos de respuesta son 76.79 m, 85.43 m
+y 84.05 m. Los intervalos de éxito de OLSR y DSDV no se solapan con el de AODV en esta
+comparación, pero los errores de respuesta sí presentan solapamiento. Como comprobación más amplia,
+el promedio descriptivo por protocolo sobre las 40 corridas E1 de cada uno (todas las movilidades)
+da:
 
-Los IC95% resumen la incertidumbre de la media entre las réplicas del tratamiento concreto. El
-solapamiento o separación de intervalos sirve aquí como referencia visual, no como prueba de
-hipótesis; no se ejecutó una prueba formal ni se corrigió por comparaciones múltiples. Las tablas de
-este informe usan 10 réplicas válidas. En algunos grupos de `E3-sombreado-cero` para otros
-protocolos, movilidades o métricas hay menos datos válidos —incluidos grupos sin observaciones—;
-el `n` de cada fila en los CSV adjuntos permite identificarlos. La inspección del solapamiento de
-intervalos no equivale por sí sola a una prueba de significancia estadística [11].
+| Protocolo | Consultas con estimación, media por corrida | Entrega de lecturas, media por corrida | Bytes de aplicación, media por corrida |
+|---|---:|---:|---:|
+| AODV | 80.4% | 92.6% | 90 161 |
+| OLSR | 96.9% | 97.5% | 109 119 |
+| DSDV | 97.9% | 98.4% | 107 153 |
 
-> Antes de concluir, revisar la sección "Qué declarar en el informe" del README del repositorio y la
-> Sección 7 del literal b: hay artefactos del modelo (sesgo de lecturas lejanas, sombreado
-> independiente por paquete, cola ARP, caducidad de rutas en AODV, sesgo de `zoneFusion=none`) que
-> pueden confundir el análisis y deben tenerse en cuenta al interpretar los números.
+En estos promedios, OLSR y DSDV aumentan el éxito de consultas en 16.5 y 17.5 puntos porcentuales
+frente a AODV, con aproximadamente 21% y 19% más bytes de aplicación. Es una tendencia agregada
+descriptiva: el comportamiento de cada protocolo depende de la movilidad, y los bytes no incluyen
+un costo energético ni una valoración del retardo extremo a extremo. La latencia de un salto de
+aplicación tampoco equivale a la edad de la estimación que recibe el dueño.
+
+### 4.2 Densidad de observadores
+
+La respuesta a la densidad no es monótona. Con 16 nodos por clúster, el error mediano de localización
+(51.77 m) es parecido al nivel base de 8 (52.95 m), con intervalos ampliamente solapados; la
+disponibilidad cae de 96.3% a 87.6% y la frescura empeora de 0.99 s a 2.19 s. El nivel bajo de 4
+tiene mayor error (57.08 m), 76.0% de disponibilidad y 2.77 s de frescura. Así, en este tratamiento
+8 nodos es el mejor de los tres en disponibilidad y frescura, pero no se establece un óptimo general
+ni una diferencia estadísticamente probada de precisión.
+
+La carga de red evidencia el costo de añadir nodos: el promedio de bytes por corrida crece de
+66 986 con 4 nodos a 142 034 con 8 y 212 296 con 16. Sin embargo, el éxito de consultas disminuye
+de 90.1% a 73.8% y 61.2%, respectivamente; al mismo tiempo, el error de respuesta baja de 92.90 m
+a 84.05 m y 80.45 m. Esto último se refiere solo a respuestas con estimación, y no compensa por sí
+solo el aumento de consultas sin respuesta. El resultado sugiere que la cantidad de observadores
+afecta simultáneamente la cobertura, la carga y la entrega, y que no basta con maximizar la densidad.
+
+### 4.3 Sombreado del canal
+
+E3 muestra el mayor compromiso entre calidad condicional y disponibilidad. A 0 dB, el error mediano
+de localización es 7.94 m y el error de respuesta 32.49 m, los menores de los tres niveles; pero
+solo 44.2% de las ventanas locales producen una estimación válida, la disponibilidad de estimaciones
+en red es 26.8%, y la frescura media de localización sube a 41.74 s. El éxito de consultas es 83.5%,
+pero la edad de las respuestas con estimación promedia 11.56 s. Estos errores pequeños describen
+solo la fracción que sí se pudo estimar y no deben interpretarse como desempeño global superior.
+
+Con 8 dB, la disponibilidad local llega a 100% y la de estimaciones en red a 96.0%, mientras que el
+error mediano de localización aumenta a 60.15 m y el de respuesta a 110.01 m; el éxito de consultas
+baja a 66.0%. Los bytes de aplicación aumentan de 115 270 a 202 072 entre 0 y 8 dB. El nivel base
+de 4 dB queda entre los extremos en varios indicadores (96.3% de disponibilidad local, 52.95 m de
+error mediano y 73.8% de éxito). En este modelo, por tanto, un canal más ruidoso no se traduce
+simplemente en menos estimaciones: cambian disponibilidad, error y tráfico en direcciones distintas.
+Los datos describen la respuesta observada del simulador y no aíslan por sí solos el mecanismo que
+la produce.
+
+La cautela estadística es especialmente importante para 0 dB. Aunque la tabla controlada
+`cluster+nodo` tiene 10 réplicas válidas, en otros grupos de movilidad y protocolo los errores y la
+frescura de localización se calcularon con apenas 1–5 réplicas; en ciertos grupos de consultas
+también hay solo 1–2. La comparación de esos grupos tiene mucha menos precisión y no debe
+generalizarse a partir de sus medias.
+
+### 4.4 Fusión de estimaciones de zona
+
+Frente a `none`, `raw` reduce el error mediano de respuesta de 84.05 m a 50.78 m (cerca de 40%) y
+mejora el éxito de consultas de 73.8% a 79.2%, pero aumenta los bytes de aplicación de 142 034 a
+246 250 (cerca de 73%). `merge` reduce el error a 65.07 m con un volumen de bytes similar a `none`
+(139 564), pero el éxito de consultas apenas cambia (74.2%). Para `none` y `merge`, los IC95% del
+error de respuesta apenas no se solapan; esa separación de unos 0.26 m es descriptiva y no prueba
+una diferencia estadística.
+
+La mejora de `raw` se observa principalmente en la respuesta consultada. En la métrica independiente
+de error mediano de localización local, sus resultados (50.64 m) son similares a `none` (52.95 m),
+con IC95% solapados; la disponibilidad local también es parecida (96.7% frente a 96.3%). Así, no
+debe describirse `raw` como un método que mejora toda localización por igual: su intercambio más
+visible es menor error de respuesta y algo más de éxito, a cambio de más comunicación. `merge`
+ofrece una alternativa de menor tráfico, con una mejora intermedia del error de respuesta, sin una
+ventaja clara en el éxito.
+
+### 4.5 Alcance de la evidencia
+
+Cada IC95% estima la media de un tratamiento entre réplicas, no la variabilidad instantánea dentro
+de una corrida. Las tablas de sensibilidad usan `n=10`; los agregados descriptivos de métodos y
+protocolos indicados arriba resumen promedios por corrida y no llevan IC. El solapamiento o la
+separación de IC sirve como orientación visual, pero no reemplaza contrastes formales. No se
+ejecutaron pruebas de hipótesis ni ajustes por comparaciones múltiples, por lo que las diferencias
+numéricas no se presentan como significativas.
+
+También deben considerarse los artefactos del modelo que pueden afectar la interpretación: sesgo de
+lecturas lejanas, sombreado independiente por paquete, cola ARP, caducidad de rutas en AODV y sesgo
+de `zoneFusion=none`, descritos en la sección "Qué declarar en el informe" del README del
+repositorio y en la Sección 7 del literal b. Las simulaciones usan configuraciones específicas y no
+incluyen una calibración con mediciones de campo; las escenas y GIF son ilustraciones de corridas
+cortas, no evidencia estadística adicional.
 
 ## 5. Conclusiones
 
-Los resultados apoyan parcialmente que la movilidad de clúster mejora la localización: en E1,
-`solo-clúster` y `cluster+nodo` muestran menor error mediano que los tratamientos sin movilidad de
-clúster, en la comparación AODV/trilateración. Sin embargo, varían la disponibilidad, la frescura y
-el tráfico, por lo que la ventaja no implica una mejora uniforme de todos los indicadores.
+1. **La movilidad de clúster mejora la precisión condicional en el caso base, pero no garantiza más
+   respuestas útiles.** Con AODV y trilateración, el error mediano de las ventanas estimables baja
+   de 121.33 m en estático a 48.92–52.95 m con movilidad de clúster. La combinación
+   `cluster+nodo` mantiene 96.3% de disponibilidad y 0.99 s de frescura, mientras que `solo-clúster`
+   reduce algo más el error pero cae a 88.6% de disponibilidad y 1.70 s. El éxito de consultas de
+   `cluster+nodo` (73.8%) también es menor que el estático (81.4%).
 
-Los niveles secundarios modifican esa conclusión. La densidad alta eleva el tráfico sin reducir de
-forma clara el error; el sombreado cambia drásticamente la disponibilidad y la edad de las
-estimaciones; y `raw` mejora el error de respuesta en la combinación medida, a costa de tráfico
-adicional. En consecuencia, la elección debe considerar conjuntamente precisión, disponibilidad,
-frescura y costo de comunicación.
+2. **El efecto de densidad tiene rendimientos decrecientes y costos de comunicación.** Pasar de 8
+   a 16 nodos aumenta los bytes de aplicación en cerca de 50% y no produce una reducción clara del
+   error de localización; el éxito de consultas baja 12.6 puntos porcentuales. Cuatro nodos reducen
+   el tráfico, pero también reducen disponibilidad y empeoran la frescura. El nivel base de 8 es el mejor
+   compromiso observado en la combinación controlada para esas dos métricas, no un óptimo universal.
 
-Estos hallazgos describen las condiciones simuladas y no deben extrapolarse directamente a una red
-real. Las diferencias entre intervalos no sustituyen contrastes estadísticos formales.
+3. **La precisión entre casos estimables no basta para valorar el sombreado.** A 0 dB se observan
+   errores bajos, pero disponibilidad local de 44.2%, disponibilidad en red de 26.8% y estimaciones
+   mucho más antiguas. A 8 dB hay más estimaciones disponibles, pero con errores mayores y menos
+   consultas exitosas. Además, los resultados a 0 dB para varios tratamientos tienen pocas réplicas
+   válidas; deben considerarse exploratorios.
+
+4. **La fusión cambia el compromiso entre calidad de respuesta y carga.** `raw` alcanza el menor
+   error de respuesta y el mayor éxito de consultas entre los modos comparados, pero con cerca de
+   73% más bytes que `none`. `merge` obtiene un error de respuesta intermedio con un volumen de
+   bytes parecido a `none`; no se ha probado que sus diferencias sean estadísticamente
+   concluyentes.
+
+5. **No hay un único protocolo o estimador ganador para todos los objetivos.** OLSR y DSDV elevan
+   el éxito de consultas respecto a AODV en E1, con más bytes de aplicación. Trilateración puede
+   lograr una mediana competitiva en el tratamiento móvil, pero su cola de error es mayor; centroide
+   tiene menor percentil 90 promedio en el resumen de E1. La selección depende de si se priorizan
+   precisión típica, errores extremos, disponibilidad, actualidad, éxito de consulta o carga.
+
+En conjunto, las 840 corridas permiten comparar tendencias dentro de este modelo y estos parámetros,
+pero no demostrar que el mismo orden de desempeño se conserve en una red física. Las conclusiones
+más firmes son los compromisos observados entre métricas y la necesidad de reportarlas juntas; las
+diferencias causales y la generalización a otros entornos requieren pruebas y validación adicionales.
 
 ## 6. Recomendaciones y trabajo futuro
 
-- Elegir el protocolo y el modo de fusión según el compromiso requerido entre éxito de consultas,
-  error de respuesta y bytes transmitidos; no seleccionar solo por precisión.
-- Repetir y ampliar los tratamientos de sombreado cero, ya que algunos grupos tuvieron pocas o
-  ninguna observación válida y una frescura muy alta.
-- Añadir contrastes formales entre tratamientos e interacciones, con un plan de comparaciones
-  definido antes del análisis.
+- Definir antes de una selección de protocolo o fusión qué métrica es prioritaria y reportar a la
+  vez precisión, disponibilidad, actualidad, éxito de consultas y bytes; evitar optimizar el error
+  solo sobre respuestas disponibles.
+- Repetir o ampliar las réplicas a 0 dB, en particular para movilidad estática y solo-nodo, hasta
+  conseguir muestras suficientes y comparables para estimar incertidumbre.
+- Añadir contrastes formales entre tratamientos con un plan de comparaciones e interacciones
+  definido de antemano; considerar modelos que respeten el diseño factorial y corregir por
+  comparaciones múltiples.
+- Reportar por separado métricas condicionales (error y edad de respuestas con estimación) y tasas
+  de disponibilidad/éxito que indican cuántos casos quedaron fuera de esas métricas.
 - Como extensiones del modelo, estudiar sombreado correlacionado espacial y temporalmente, medir
   distancias con tecnologías como Wi-Fi FTM y evaluar estimadores temporales (por ejemplo, un filtro
   de Kalman integrado mediante ns3-ai).
